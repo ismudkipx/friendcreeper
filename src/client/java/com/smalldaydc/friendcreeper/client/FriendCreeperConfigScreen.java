@@ -4,7 +4,7 @@ import com.smalldaydc.friendcreeper.FriendCreeperConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
@@ -239,8 +239,8 @@ public class FriendCreeperConfigScreen extends Screen {
         }
 
         @Override
-        public void renderContent(GuiGraphics graphics, int mouseX, int mouseY, boolean hovered, float partialTick) {
-            graphics.drawCenteredString(this.minecraft.font, this.name,
+        public void extractContent(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float partialTick) {
+            graphics.centeredText(this.minecraft.font, this.name,
                     this.getContentX() + this.getContentWidth() / 2, this.getContentY() + 5, 0xFFFFFFFF);
         }
 
@@ -307,20 +307,20 @@ public class FriendCreeperConfigScreen extends Screen {
         }
 
         @Override
-        public void renderContent(GuiGraphics graphics, int mouseX, int mouseY, boolean hovered, float partialTick) {
+        public void extractContent(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float partialTick) {
             int x = this.getContentX();
             int y = this.getContentY();
             int buttonX = x + this.getContentWidth() - RESET_WIDTH - PADDING - TOGGLE_WIDTH;
 
-            graphics.drawString(this.minecraft.font, this.option.name(), x, y + 5, 0xFFFFFFFF);
+            graphics.text(this.minecraft.font, this.option.name(), x, y + 5, 0xFFFFFFFF);
 
             this.toggle.setX(buttonX);
             this.toggle.setY(y);
             this.reset.setX(this.toggle.getX() + this.toggle.getWidth() + PADDING);
             this.reset.setY(y);
 
-            this.toggle.render(graphics, mouseX, mouseY, partialTick);
-            this.reset.render(graphics, mouseX, mouseY, partialTick);
+            this.toggle.extractRenderState(graphics, mouseX, mouseY, partialTick);
+            this.reset.extractRenderState(graphics, mouseX, mouseY, partialTick);
 
             // Only the option label shows the tooltip, not the buttons.
             if (hovered && mouseX < buttonX) {

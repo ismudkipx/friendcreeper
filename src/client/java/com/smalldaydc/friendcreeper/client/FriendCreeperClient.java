@@ -6,7 +6,7 @@ import com.smalldaydc.friendcreeper.client.render.CreeperPoppyFeature;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityRenderLayerRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.CreeperRenderer;
@@ -40,7 +40,7 @@ public class FriendCreeperClient implements ClientModInitializer {
             return InteractionResult.FAIL;
         });
 
-        LivingEntityFeatureRendererRegistrationCallback.EVENT.register(
+        LivingEntityRenderLayerRegistrationCallback.EVENT.register(
             (entityType, entityRenderer, registrationHelper, context) -> {
                 if (entityType == EntityType.CREEPER && entityRenderer instanceof CreeperRenderer) {
                     registrationHelper.register(

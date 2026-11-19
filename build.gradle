@@ -1,5 +1,5 @@
 plugins {
-    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
     id 'me.modmuss50.mod-publish-plugin' version '2.2.0'
 }
 
@@ -34,21 +34,20 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
     // Mod Menu — optional at runtime, required at compile time for config screen integration
-    modCompileOnly("com.terraformersmc:modmenu:${project.modmenu_version}")
-    modLocalRuntime("com.terraformersmc:modmenu:${project.modmenu_version}")
+    compileOnly("com.terraformersmc:modmenu:${project.modmenu_version}")
+    localRuntime("com.terraformersmc:modmenu:${project.modmenu_version}")
 
     // Jade — optional at runtime, required at compile time for tooltip integration
-    modCompileOnly("maven.modrinth:jade:${project.jade_version}")
-    modLocalRuntime("maven.modrinth:jade:${project.jade_version}")
+    compileOnly("maven.modrinth:jade:${project.jade_version}")
+    localRuntime("maven.modrinth:jade:${project.jade_version}")
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.release = 25
     it.options.encoding = "UTF-8"
 }
 
@@ -95,7 +94,7 @@ gradle.projectsEvaluated {
             modrinth {
                 accessToken = providers.environmentVariable('MODRINTH_TOKEN')
                 projectId = 'zJk1s6MI'
-                file = remapJar.archiveFile
+                file = tasks.named('jar', Jar).get().archiveFile
                 displayName = releaseTitle
                 version = releaseVersion
                 minecraftVersions.add(project.minecraft_version)
@@ -107,7 +106,7 @@ gradle.projectsEvaluated {
             curseforge {
                 accessToken = providers.environmentVariable('CURSEFORGE_TOKEN')
                 projectId = '1518666'
-                file = remapJar.archiveFile
+                file = tasks.named('jar', Jar).get().archiveFile
                 displayName = releaseTitle
                 version = releaseVersion
                 minecraftVersions.add(project.minecraft_version)

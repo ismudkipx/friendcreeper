@@ -4,11 +4,11 @@
   "version": "${version}",
   "name": "Friend Creeper",
   "description": "Tame Creepers with gunpowder and make them your friend.",
-  "authors": ["smalldayDC_ (mudkipX_)"],
+  "authors": ["smalldayDC_"],
   "contact": {
     "homepage": "https://modrinth.com/mod/friendcreeper",
-    "sources": "https://github.com/smalldayDC/friendcreeper",
-    "issues": "https://github.com/smalldayDC/friendcreeper/issues"
+    "sources": "https://github.com/ismudkipx/friendcreeper",
+    "issues": "https://github.com/ismudkipx/friendcreeper/issues"
   },
   "license": "MIT",
   "icon": "icon.png",
@@ -36,12 +36,13 @@
     }
   ],
   "depends": {
-    "fabricloader": ">=0.19.2",
-    "fabric-api": ">=0.141.3",
-    "minecraft": "1.21.11"
+    "fabricloader": ">=0.19.5",
+    "fabric-api": ">=0.145.1",
+    "minecraft": "~26.1",
+    "java": ">=25"
   },
   "suggests": {
-    "modmenu": ">=17.0.0",
-    "jade": ">=21.1.6"
+    "modmenu": ">=18.0.0-beta.1",
+    "jade": ">=26.1.0"
   }
 }

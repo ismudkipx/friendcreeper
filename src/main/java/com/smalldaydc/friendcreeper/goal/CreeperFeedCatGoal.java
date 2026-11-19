@@ -6,7 +6,10 @@ import com.smalldaydc.friendcreeper.ITamedCreeper;
 import java.util.EnumSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.feline.Cat;
@@ -101,7 +104,16 @@ public class CreeperFeedCatGoal extends Goal {
         targetCat.heal(food != null ? (float) food.nutrition() : 1.0f);
         asTamed().friendcreeper$setHeldFish(ItemStack.EMPTY);
 
-        targetCat.playSound(SoundEvents.CAT_EAT, 1.0f, 1.0f);
+        // Play the age-appropriate cat eating sound: babies have their own (faster) eat
+        // sound (entity.baby_cat.eat, a static field), adults use entity.cat.eat which has
+        // no static SoundEvents field in 26.1, so resolve it from the registry by id.
+        SoundEvent eatSound = targetCat.isBaby()
+                ? SoundEvents.CAT_EAT_BABY.value()
+                : BuiltInRegistries.SOUND_EVENT.getValue(
+                        Identifier.fromNamespaceAndPath("minecraft", "entity.cat.eat"));
+        if (eatSound != null) {
+            targetCat.playSound(eatSound, 1.0f, 1.0f);
+        }
         if (creeper.level() instanceof ServerLevel sw) {
             sw.sendParticles(ParticleTypes.HEART,
                     targetCat.getX(), targetCat.getY(0.5), targetCat.getZ(),

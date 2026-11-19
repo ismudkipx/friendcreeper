@@ -25,8 +25,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(CreeperRenderer.class)
 public class MixinCreeperEntityRenderer {
 
-    @Unique private static final ItemStack POPPY_STACK = new ItemStack(Items.POPPY);
-    @Unique private static final ItemStack WITHER_ROSE_STACK = new ItemStack(Items.WITHER_ROSE);
+    // Built lazily on first render — constructing an ItemStack at class-init time
+    // throws "Components not bound yet" because item components aren't bound when
+    // entity renderers are created during resource reload.
+    @Unique private static ItemStack friendcreeper$poppyStack;
+    @Unique private static ItemStack friendcreeper$witherRoseStack;
+
+    @Unique
+    private static ItemStack friendcreeper$poppyStack() {
+        if (friendcreeper$poppyStack == null) {
+            friendcreeper$poppyStack = new ItemStack(Items.POPPY);
+        }
+        return friendcreeper$poppyStack;
+    }
+
+    @Unique
+    private static ItemStack friendcreeper$witherRoseStack() {
+        if (friendcreeper$witherRoseStack == null) {
+            friendcreeper$witherRoseStack = new ItemStack(Items.WITHER_ROSE);
+        }
+        return friendcreeper$witherRoseStack;
+    }
+
     @Unique private static final Identifier HAPPY_TEXTURE = Identifier.fromNamespaceAndPath("friendcreeper", "textures/entity/creeper/happy.png");
     @Unique private static final Identifier SAD_TEXTURE = Identifier.fromNamespaceAndPath("friendcreeper", "textures/entity/creeper/sad.png");
 
@@ -49,7 +69,7 @@ public class MixinCreeperEntityRenderer {
             FriendCreeperConfig config = FriendCreeperConfig.get();
             // Show wither rose when low health (if enabled), poppy otherwise
             ItemStack flowerStack = (config.witherRoseOnLowHealth && lowHealth)
-                    ? WITHER_ROSE_STACK : POPPY_STACK;
+                    ? friendcreeper$witherRoseStack() : friendcreeper$poppyStack();
             Minecraft.getInstance().getItemModelResolver()
                     .updateForNonLiving(fcState.friendcreeper$getPoppyRenderState(),
                             flowerStack, ItemDisplayContext.GROUND, entity);
