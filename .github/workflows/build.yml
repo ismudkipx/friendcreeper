@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [ "master", "26.1" ]
+    branches: [ "26.1" ]
 
 permissions:
   contents: read
